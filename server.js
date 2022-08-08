@@ -2,6 +2,7 @@ const mysql = require('mysql2');
 const cTable = require('console.table');
 const inquirer = require('inquirer');
 
+
 require('dotenv').config();
 
 // Create connection to database
@@ -15,12 +16,8 @@ const db = mysql.createConnection({
 console.log(`Connected to the ${process.env.DB_NAME} database.`)
 );
 
-db.connect(function(err) {
-  if (err) throw err;
-  start();
-});
 
-// Main menu that prompts user for instructions
+// Start menu that prompts user for instructions
 function start() {
   inquirer.prompt({
     name: "start_menu",
@@ -35,7 +32,7 @@ function start() {
       "Update employee role", 
       "Exit"]
   })
-      // switch statement used to cycle through reponses based on user selection 
+// Switch statement used to cycle through reponses based on user selection 
     .then((res) => {
       switch (res.start_menu) {
         case "View all departments":
@@ -69,6 +66,64 @@ function start() {
         case "Exit":
           db.end();
           break;
-        }
+        };
     });
 };
+
+function viewDepartments() {
+  const sql = `SELECT * FROM departments`;
+  
+  db.query(sql, (err,res) => {
+    if (err) throw err;
+    console.log('Showing all departments')
+    cTable(res);
+    start();
+  })
+};
+
+function viewRoles() {
+  const sql = `SELECT * FROM roles`;
+  
+  db.query(sql, (err,res) => {
+    if (err) throw err;
+    console.log('Showing all roles')
+    cTable(res);
+    start();
+  })
+};
+
+function viewEmployees() {
+  const sql = `SELECT * FROM employees`;
+  
+  db.query(sql, (err,res) => {
+    if (err) throw err;
+    console.log('Showing all employees')
+    cTable(res);
+    start();
+  })
+};
+
+function addDepartment() {
+  console.log("Awaiting construction")
+  start();
+}
+
+function addRole() {
+  console.log("Awaiting construction")
+  start();
+}
+
+function addEmployee() {
+  console.log("Awaiting construction")
+  start();
+}
+
+function updateEmployee() {
+  console.log("Awaiting construction")
+  start();
+}
+
+db.connect(err => {
+  if (err) throw err;
+  start();
+})
