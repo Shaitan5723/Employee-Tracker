@@ -73,10 +73,10 @@ function start() {
 function viewDepartments() {
   const sql = `SELECT * FROM departments`;
   
-  db.query(sql, (err,res) => {
+  db.query(sql, (err, res) => {
     if (err) throw err;
     console.log('Showing all departments')
-    cTable(res);
+    console.table(res);
     start();
   })
 };
@@ -87,7 +87,7 @@ function viewRoles() {
   db.query(sql, (err,res) => {
     if (err) throw err;
     console.log('Showing all roles')
-    cTable(res);
+    console.table(res);
     start();
   })
 };
@@ -98,14 +98,27 @@ function viewEmployees() {
   db.query(sql, (err,res) => {
     if (err) throw err;
     console.log('Showing all employees')
-    cTable(res);
+    console.table(res);
     start();
   })
 };
 
 function addDepartment() {
-  console.log("Awaiting construction")
-  start();
+  inquirer.prompt({
+    name: "departmentName",
+    type: "input",
+    message: "Please enter a new department name.",
+  })
+    .then((answer) => {
+      db.query(`ALTER TABLE departments ADD ${answer} varchar(30) NOT NULL;`, (err, res) => {
+        if (err) throw err;
+        console.log(`Successfully added ${answer} to departments table`)
+        console.table(res);
+        start();
+      });
+    })
+ 
+  
 }
 
 function addRole() {
