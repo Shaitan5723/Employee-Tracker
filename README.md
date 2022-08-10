@@ -7,7 +7,7 @@ Users are able to input the details of departments, roles and employee data to q
 Below is a video demo on how the application is used. </br>
 
 
-https://user-images.githubusercontent.com/105050107/183911018-e532815e-b48e-41b3-aa85-da70ff2efe20.mp4
+https://user-images.githubusercontent.com/105050107/183912174-cd3b16ce-f4d5-45fb-ae8e-37f6f82f8a38.mp4
 
 
 
