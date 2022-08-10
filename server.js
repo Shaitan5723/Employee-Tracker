@@ -130,13 +130,61 @@ function addDepartment() {
 }
 
 function addRole() {
-  console.log("Awaiting construction")
-  start();
+  inquirer.prompt([{
+    message: "Please enter a new role name.",
+    name: "roleName",
+    type: "input",
+  },
+  {
+    message: "Please enter the role's salary.",
+    name: "roleSalary",
+    type: "input",
+  },
+  {
+    message: "Please enter the department id the role belongs to.",
+    name: "roleDepartment",
+    type: "input",
+  }])
+    .then((answer) => {
+      db.query(`INSERT INTO roles(title, salary, departments_id) VALUES (?,?,?);`, [answer.roleName, answer.roleSalary, parseInt(answer.roleDepartment)], (err, res) => {
+        if (err) throw err;
+        console.log(`Successfully added ${answer.roleName} to role's table`)
+        console.table(res);
+        start();
+      });
+    })
+  
 }
 
 function addEmployee() {
-  console.log("Awaiting construction")
-  start();
+  inquirer.prompt([{
+    message: "Please enter the new employee's first name.",
+    name: "employeeFirstName",
+    type: "input",
+  },
+  {
+    message: "Please enter the new employee's last name.",
+    name: "employeeLastName",
+    type: "input",
+  },
+  {
+    message: "Please enter the new employee's role id.",
+    name: "roleId",
+    type: "input",
+  },
+  {
+    message: "Please enter the new employee's manager id.",
+    name: "managerID",
+    type: "input",
+  }])
+    .then((answer) => {
+      db.query(`INSERT INTO employees(first_name, last_name, roles_id, manager_id) VALUES (?,?,?,?);`, [answer.employeeFirstName, answer.employeeLastName, answer.roleId, answer.managerID], (err, res) => {
+        if (err) throw err;
+        console.log(`Successfully added ${answer.employeeFirstName} to employee's table`)
+        console.table(res);
+        start();
+      });
+    })
 }
 
 function updateEmployee() {
