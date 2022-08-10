@@ -187,9 +187,38 @@ function addEmployee() {
     })
 }
 
-function updateEmployee() {
-  console.log("Awaiting construction")
-  start();
+const updateEmployee = async () => {
+  const existEmployees = `SELECT employees.id, CONCAT(employees.first_name,' ', employees.last_name) AS employeeName FROM employees;`;
+  db.query(existEmployees, async (err,res) => {
+    if (err) throw err;
+    const selectedEmployee = await
+      inquirer.prompt([
+        {
+        message: "Which employee would you like to update?",
+        name: "newEmployee",
+        type: "list",
+        choices: res.map(res => ({name: res.employeeName, value: res.id})),
+  }]);
+    db.query(`SELECT * FROM roles`, async (err,res) => {
+      if (err) throw err;
+      const selectRole = await
+        inquirer.prompt([
+          {
+          message: "What is the new role you would like your employee to enter?",
+          name: "newEmployeeRole",
+          type: "list",
+          choices: res.map(res => ({name: res.title, value: res.id})),
+          }
+        ]);
+        const sql = `UPDATE employees SET roles_id = ${selectRole.newEmployeeRole} WHERE id = ${selectedEmployee.newEmployee};`
+        db.query(sql, (err, res) => {
+          if (err) throw err;
+          console.log(`${selectedEmployee.newEmployee} is now a ${selectRole.newEmployeeRole}`)
+          start();
+        });
+  })
+  
+})
 }
 
 db.connect(err => {
