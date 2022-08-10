@@ -82,7 +82,10 @@ function viewDepartments() {
 };
 
 function viewRoles() {
-  const sql = `SELECT * FROM roles`;
+  const sql = `SELECT roles.title, roles.id, departments.department_name, roles.salary 
+  FROM roles
+  INNER JOIN departments 
+  ON roles.departments_id=departments.id`;
   
   db.query(sql, (err,res) => {
     if (err) throw err;
