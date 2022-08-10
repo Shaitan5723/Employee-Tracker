@@ -96,7 +96,12 @@ function viewRoles() {
 };
 
 function viewEmployees() {
-  const sql = `SELECT * FROM employees`;
+  const sql = `SELECT employees.id, employees.first_name, employees.last_name, roles.title, roles.salary, CONCAT(manager.first_name, ' ', manager.last_name) AS manager
+  FROM employees
+  INNER JOIN roles ON employees.roles_id=roles.id
+  INNER JOIN departments ON roles.departments_id=departments.id
+  LEFT JOIN employees manager on manager.id = employees.manager_id
+  ORDER BY employees.id;`;
   
   db.query(sql, (err,res) => {
     if (err) throw err;
@@ -113,9 +118,9 @@ function addDepartment() {
     message: "Please enter a new department name.",
   })
     .then((answer) => {
-      db.query(`ALTER TABLE departments ADD ${answer} varchar(30) NOT NULL;`, (err, res) => {
+      db.query(`INSERT INTO departments(department_name) VALUES (?);`, answer.departmentName, (err, res) => {
         if (err) throw err;
-        console.log(`Successfully added ${answer} to departments table`)
+        console.log(`Successfully added ${answer.departmentName} to departments table`)
         console.table(res);
         start();
       });
